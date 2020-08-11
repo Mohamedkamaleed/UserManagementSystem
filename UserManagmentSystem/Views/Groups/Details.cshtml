@@ -1,0 +1,170 @@
+﻿@model UserManagmentSystem.Models.GroupsViewModel
+@using UserManagmentSystem.Models
+@using UserManagmentSystem.Controllers
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>tblGroups</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+    </dl>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Users</h3>
+
+        <div class="card-tools">
+            <span class="badge badge-success">@Html.DisplayFor(model => model.Users.Count) Members</span>
+
+        </div>
+    </div>
+    <!-- /.card-header -->
+    @if (Model.Users.Count > 0)
+    {
+        <div class="card-body">
+            <div class="row">
+                @foreach (UsersViewModel user in Model.Users)
+                {
+                    <div class="col-md-4">
+                        <div class="card card-widget widget-user-2">
+                            <!-- Add the bg color to the header using any of the bg-* classes -->
+
+                            <div class="widget-user-header bg-warning">
+                                <div class="card-tools">
+                                    @using (Html.BeginForm("RevokeUser", "Groups", new { UserId = user.Id, GroupId = Model.PK_Id }, FormMethod.Post, null))
+                                    {
+                                        @Html.AntiForgeryToken()
+
+                                        <button type="submit" value="Delete" class="btn btn-tool float-right">
+                                            <i class="fas fa-times"></i>
+
+                                        </button>
+                                    }
+                                </div>
+                                <div class="widget-user-image">
+                                    <img class="img-circle elevation-2" src="#" alt="User Avatar" height="65" width="65">
+                                </div>
+                                <!-- /.widget-user-image -->
+                                <h3 class="widget-user-username">@user.Name</h3>
+                                <h5 class="widget-user-desc">@user.Postition</h5>
+                            </div>
+                            <div class="card-footer p-0">
+                                <ul class="nav flex-column">
+                                    <li class="nav-item">
+                                        <a class="nav-link">
+                                            Orders <span class="float-right badge bg-primary">@user.OrdersConut</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+
+                }
+            </div>
+            <!-- /.users-list -->
+        </div>
+    }
+
+    <!-- /.card-body -->
+    <div class="card-footer text-center">
+        <a href="javascript:void(0)" onclick="location.href='@Url.Action("Index","Users")'">View All Users</a>
+    </div>
+    <!-- /.card-footer -->
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Actions</h3>
+
+        <div class="card-tools">
+            <span class="badge badge-success">@Html.DisplayFor(model => model.Actions.Count) Actions</span>
+
+        </div>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+
+
+
+        @if (Model.Actions.Count > 0)
+        {
+            <div class="row">
+                @foreach (ActionsViewModel action in Model.Actions)
+                {
+
+                    <div class="col-md-6">
+                        <div class="card card-outline card-success">
+                            <div class="card-header">
+                                <h3 class="card-title"> @action.Name</h3>
+
+                                <div class="card-tools">
+
+
+                                    @using (Html.BeginForm("RevokeAction", "Groups", new { GroupId = Model.PK_Id, ActionName = @action.Name }, FormMethod.Post, null))
+                                    {
+                                        @Html.AntiForgeryToken()
+
+                                        <button type="submit" value="Delete" class="btn btn-tool">
+                                            <i class="fas fa-times"></i>
+
+                                        </button>
+                                    }
+
+                                </div>
+                                <!-- /.card-tools -->
+                            </div>
+
+                        </div>
+                        <!-- /.card -->
+                    </div>
+
+
+                }
+
+            </div>
+        }
+
+
+    </div>
+    <!-- /.card-body -->
+    <div class="card-footer ">
+        @using (Html.BeginForm("AddAction", "Groups",
+           new { GroupId = Model.PK_Id, ActionName = "ActionName" }, FormMethod.Post, null))
+        {
+            @Html.AntiForgeryToken()
+            <div class="row">
+                <div class="col-md-6">
+                    @Html.DropDownList("ActionName", new SelectList(ViewBag.AvailableActions, "Value", "Text"), htmlAttributes: new { @class = "form-control ui  search selection dropdown " })
+
+                </div>
+                <div class="col-md-6">
+                    <input type="submit" value="Add New Action" class="btn btn-default" />
+                </div>
+            </div>
+
+
+        }
+    </div>
+</div>
+
+
+
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.PK_Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

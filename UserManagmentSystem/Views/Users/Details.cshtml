@@ -1,0 +1,168 @@
+﻿@model UserManagmentSystem.Models.UsersViewModel
+@using UserManagmentSystem.Models
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>AspNetUsers</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EmailConfirmed)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EmailConfirmed)
+        </dd>
+
+
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PhoneNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PhoneNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PhoneNumberConfirmed)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PhoneNumberConfirmed)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TwoFactorEnabled)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TwoFactorEnabled)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LockoutEndDateUtc)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LockoutEndDateUtc)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LockoutEnabled)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LockoutEnabled)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AccessFailedCount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AccessFailedCount)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UserName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UserName)
+        </dd>
+
+    </dl>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Groups</h3>
+
+        <div class="card-tools">
+            <span class="badge badge-success">@Html.DisplayFor(model => model.Groups.Count) Groups</span>
+
+        </div>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+
+
+
+        @if (Model.Groups.Count > 0)
+        {
+            <div class="row">
+                @foreach (GroupsViewModel Group in Model.Groups)
+                {
+
+                    <div class="col-md-6">
+                        <div class="card card-outline card-success">
+                            <div class="card-header">
+                                <h3 class="card-title"> @Group.Name</h3>
+
+                                <div class="card-tools">
+
+
+                                    @using (Html.BeginForm("RevokeGroup", "Users", new { UserId = Model.Id, GroupId = Group.PK_Id }, FormMethod.Post, null))
+                                    {
+                                        @Html.AntiForgeryToken()
+
+                                        <button type="submit" value="Delete" class="btn btn-tool">
+                                            <i class="fas fa-times"></i>
+
+                                        </button>
+                                    }
+
+                                </div>
+                                <!-- /.card-tools -->
+                            </div>
+
+                        </div>
+                        <!-- /.card -->
+                    </div>
+
+
+                }
+
+            </div>
+        }
+
+
+    </div>
+    <!-- /.card-body -->
+    <div class="card-footer ">
+        @using (Html.BeginForm("AddGroup", "Users",
+           new { UserId = Model.Id, GroupId = "GroupId" }, FormMethod.Post, null))
+        {
+            @Html.AntiForgeryToken()
+            <div class="row">
+                <div class="col-md-6">
+                    @Html.DropDownList("GroupId", new SelectList(ViewBag.AvailableGroups, "Value", "Text"), htmlAttributes: new { @class = "form-control ui  search selection dropdown " })
+
+                </div>
+                <div class="col-md-6">
+                    <input type="submit" value="Add New Group" class="btn btn-default" />
+                </div>
+            </div>
+
+
+        }
+    </div>
+</div>
+
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
