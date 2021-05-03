@@ -6,16 +6,17 @@ using System.Web.Mvc;
 
 namespace UserManagmentSystem.Controllers
 {
+    [ClaimsAuthorize]
     public class HomeController : Controller
     {
-        [ClaimsAuthorize("HttpGet : Home/Index")]
+
         [HttpGet]
         public ActionResult Index()
         {
             return View();
         }
 
-        [ClaimsAuthorize("HttpGet : Home/About")]
+
         [HttpGet]
         public ActionResult About()
         {
@@ -24,7 +25,7 @@ namespace UserManagmentSystem.Controllers
             return View();
         }
 
-        [ClaimsAuthorize("HttpGet : Home/Contact")]
+  
         [HttpGet]
         public ActionResult Contact()
         {
